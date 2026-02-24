@@ -1,0 +1,1374 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anvesh Varma — Software Engineer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #0a0a0a;
+            --surface: #141414;
+            --surface-light: #1a1a1a;
+            --text: #ffffff;
+            --text-muted: #666666;
+            --accent: #ff3b30;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            overflow-x: hidden;
+        }
+
+        .font-display {
+            font-family: 'Syne', sans-serif;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 4px;
+        }
+
+        .grain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        .hero-text {
+            font-size: clamp(3rem, 15vw, 12rem);
+            line-height: 0.9;
+            letter-spacing: -0.04em;
+        }
+
+        .scroll-text-container {
+            overflow: hidden;
+            white-space: nowrap;
+        }
+        
+        .scroll-text {
+            display: inline-flex;
+            animation: scroll 20s linear infinite;
+        }
+        
+        @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        .magnetic-btn {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .magnetic-btn:hover {
+            background: var(--text);
+            color: var(--bg);
+            transform: scale(1.1);
+        }
+
+        .project-card {
+            position: relative;
+            overflow: hidden;
+            background: var(--surface);
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        
+        .project-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(60px);
+            transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .link-hover {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .link-hover::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 1px;
+            bottom: -2px;
+            left: 0;
+            background: var(--accent);
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        
+        .link-hover:hover::after {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+
+        /* 3D Skills Globe */
+        .skills-globe-container {
+            position: relative;
+            width: 100%;
+            height: 600px;
+            perspective: 1000px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .skills-globe {
+            position: relative;
+            width: 500px;
+            height: 500px;
+            transform-style: preserve-3d;
+            animation: rotateGlobe 30s linear infinite;
+        }
+
+        @keyframes rotateGlobe {
+            0% { transform: rotateY(0deg) rotateX(10deg); }
+            100% { transform: rotateY(360deg) rotateX(10deg); }
+        }
+
+        .skill-orb {
+            position: absolute;
+            padding: 0.75rem 1.5rem;
+            background: rgba(20, 20, 20, 0.9);
+            border: 1px solid rgba(255, 59, 48, 0.3);
+            border-radius: 100px;
+            font-size: 0.875rem;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 20px rgba(255, 59, 48, 0.1);
+        }
+
+        .skill-orb:hover {
+            background: rgba(255, 59, 48, 0.2);
+            border-color: var(--accent);
+            transform: scale(1.2) !important;
+            box-shadow: 0 0 40px rgba(255, 59, 48, 0.4);
+            z-index: 100;
+            animation-play-state: paused;
+        }
+
+        .skill-orb::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            border-radius: 100px;
+            background: linear-gradient(45deg, transparent, rgba(255,59,48,0.3), transparent);
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .skill-orb:hover::before {
+            opacity: 1;
+        }
+
+        /* Connecting lines */
+        .globe-lines {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+        }
+
+        .globe-line {
+            position: absolute;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,59,48,0.2), transparent);
+            transform-origin: left center;
+        }
+
+        /* Inner core */
+        .globe-core {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255,59,48,0.3) 0%, transparent 70%);
+            animation: pulseCore 3s ease-in-out infinite;
+        }
+
+        @keyframes pulseCore {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+            50% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.8; }
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-left: 2rem;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0.5rem;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--surface);
+            border: 2px solid var(--text-muted);
+        }
+        
+        .timeline-item:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            left: 3px;
+            top: 1.5rem;
+            width: 1px;
+            height: calc(100% + 2rem);
+            background: rgba(255,255,255,0.1);
+        }
+
+        .cursor-dot,
+        .cursor-outline {
+            position: fixed;
+            top: 0;
+            left: 0;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            z-index: 9998;
+            pointer-events: none;
+        }
+        
+        .cursor-dot {
+            width: 5px;
+            height: 5px;
+            background: var(--accent);
+        }
+        
+        .cursor-outline {
+            width: 30px;
+            height: 30px;
+            border: 1px solid rgba(255,255,255,0.5);
+            transition: width 0.2s, height 0.2s, background-color 0.2s;
+        }
+        
+        .cursor-outline.hover {
+            width: 60px;
+            height: 60px;
+            background: rgba(255,59,48,0.1);
+            border-color: var(--accent);
+        }
+
+        .mobile-menu {
+            position: fixed;
+            inset: 0;
+            background: var(--bg);
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+        
+        .mobile-menu.open {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        ::selection {
+            background: var(--accent);
+            color: white;
+        }
+
+        /* Pause globe on hover */
+        .skills-globe-container:hover .skills-globe {
+            animation-play-state: paused;
+        }
+
+        /* Skill category colors */
+        .skill-lang { border-color: rgba(59, 130, 246, 0.4); color: #60a5fa; }
+        .skill-ai { border-color: rgba(168, 85, 247, 0.4); color: #c084fc; }
+        .skill-backend { border-color: rgba(34, 197, 94, 0.4); color: #4ade80; }
+        .skill-db { border-color: rgba(251, 146, 60, 0.4); color: #fb923c; }
+        .skill-cloud { border-color: rgba(236, 72, 153, 0.4); color: #f472b6; }
+        .skill-tools { border-color: rgba(148, 163, 184, 0.4); color: #94a3b8; }
+
+        .skill-orb:hover {
+            color: white !important;
+        }
+         /* 3D Skills Globe */
+.skills-globe-container {
+    position: relative;
+    width: 100%;
+    height: 600px;
+    perspective: 1000px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.skills-globe {
+    position: relative;
+    width: 500px;
+    height: 500px;
+    transform-style: preserve-3d;
+    animation: rotateGlobe 30s linear infinite;
+}
+
+@keyframes rotateGlobe {
+    0% { transform: rotateY(0deg) rotateX(10deg); }
+    100% { transform: rotateY(360deg) rotateX(10deg); }
+}
+
+.skills-globe-container:hover .skills-globe {
+    animation-play-state: paused;
+}
+
+.skill-orb {
+    position: absolute;
+    padding: 0.5rem 1rem;
+    background: rgba(20, 20, 20, 0.9);
+    border: 1px solid;
+    border-radius: 100px;
+    font-size: 0.75rem;
+    white-space: nowrap;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    backdrop-filter: blur(10px);
+    left: 0;
+    top: 0;
+}
+
+.skill-orb:hover {
+    transform: scale(1.2) !important;
+    z-index: 100;
+    box-shadow: 0 0 30px currentColor;
+    color: white !important;
+}
+
+.globe-core {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,59,48,0.3) 0%, transparent 70%);
+    animation: pulseCore 3s ease-in-out infinite;
+}
+
+@keyframes pulseCore {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+    50% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.8; }
+}
+    </style>
+</head>
+<body class="antialiased">
+    <div class="grain"></div>
+    <div class="cursor-dot hidden md:block"></div>
+    <div class="cursor-outline hidden md:block"></div>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 px-6 py-6 flex justify-between items-center mix-blend-difference">
+        <a href="#" class="font-display text-2xl font-bold tracking-tighter z-50">AV.</a>
+        <div class="hidden md:flex items-center gap-8">
+            <a href="#work" class="text-sm uppercase tracking-widest hover:text-gray-400 transition-colors">Work</a>
+            <a href="#about" class="text-sm uppercase tracking-widest hover:text-gray-400 transition-colors">About</a>
+            <a href="#skills" class="text-sm uppercase tracking-widest hover:text-gray-400 transition-colors">Skills</a>
+            <a href="#projects" class="text-sm uppercase tracking-widest hover:text-gray-400 transition-colors">Projects</a>
+            <a href="#contact" class="text-sm uppercase tracking-widest hover:text-gray-400 transition-colors">Contact</a>
+        </div>
+        <button onclick="toggleMenu()" class="md:hidden z-50 w-10 h-10 flex flex-col justify-center items-center gap-1.5">
+            <span class="w-6 h-0.5 bg-white transition-all menu-line-1"></span>
+            <span class="w-6 h-0.5 bg-white transition-all menu-line-2"></span>
+        </button>
+    </nav>
+
+    <div id="mobile-menu" class="mobile-menu">
+        <div class="flex flex-col gap-8 text-center">
+            <a href="#work" onclick="toggleMenu()" class="font-display text-5xl font-bold hover:text-[#ff3b30] transition-colors">Work</a>
+            <a href="#about" onclick="toggleMenu()" class="font-display text-5xl font-bold hover:text-[#ff3b30] transition-colors">About</a>
+            <a href="#skills" onclick="toggleMenu()" class="font-display text-5xl font-bold hover:text-[#ff3b30] transition-colors">Skills</a>
+            <a href="#projects" onclick="toggleMenu()" class="font-display text-5xl font-bold hover:text-[#ff3b30] transition-colors">Projects</a>
+            <a href="#contact" onclick="toggleMenu()" class="font-display text-5xl font-bold hover:text-[#ff3b30] transition-colors">Contact</a>
+        </div>
+    </div>
+
+    <!-- Hero -->
+    <section class="min-h-screen flex flex-col justify-center relative px-6 pt-20">
+        <div class="max-w-[1800px] mx-auto w-full">
+            <div class="reveal">
+                <p class="text-sm uppercase tracking-[0.3em] text-gray-500 mb-8">Software Engineer & AI Specialist</p>
+            </div>
+            <h1 class="font-display hero-text font-bold uppercase reveal">
+                Anvesh<br>
+                <span class="text-gray-600">Varma</span>
+            </h1>
+            <div class="mt-12 flex flex-col md:flex-row md:items-end justify-between gap-8 reveal">
+                <div class="max-w-md">
+                    <p class="text-gray-400 text-lg leading-relaxed">
+                        Master's student at NYU building intelligent systems.
+                        Specializing in backend architecture, AI/ML, and scalable infrastructure.
+                    </p>
+                </div>
+                <div class="flex items-center gap-6">
+                    <a href="#work" class="magnetic-btn">
+                        <span class="text-sm uppercase tracking-widest">View Work</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="absolute bottom-0 left-0 right-0 border-t border-white/10 py-6 scroll-text-container">
+            <div class="scroll-text font-display text-6xl md:text-8xl font-bold text-white/5 uppercase">
+                <span class="mx-8">Backend</span><span class="mx-8">•</span>
+                <span class="mx-8">Machine Learning</span><span class="mx-8">•</span>
+               
+                <span class="mx-8">AI Systems</span><span class="mx-8">•</span>
+                <span class="mx-8">Backend</span><span class="mx-8">•</span>
+                <span class="mx-8">Machine Learning</span><span class="mx-8">•</span>
+            
+                <span class="mx-8">AI Systems</span><span class="mx-8">•</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Work/Experience Section -->
+    <section id="work" class="py-32 px-6">
+        <div class="max-w-[1800px] mx-auto">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-20 reveal">
+                <div>
+                    <p class="text-sm uppercase tracking-[0.3em] text-gray-500 mb-4">01 — Experience</p>
+                    <h2 class="font-display text-5xl md:text-7xl font-bold">Selected<br>Work</h2>
+                </div>
+                <p class="text-gray-400 max-w-sm mt-6 md:mt-0">Professional experience in software engineering, AI, and academic research.</p>
+            </div>
+
+            <div class="space-y-1">
+                
+
+                <!-- INFOLOB -->
+                <div class="group border-t border-white/10 py-8 md:py-12 reveal cursor-pointer hover:bg-white/5 transition-colors px-6 -mx-6">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                        <div class="flex-1">
+                            <div class="flex items-center gap-4 mb-2">
+                                <h3 class="font-display text-2xl md:text-4xl font-bold group-hover:text-[#ff3b30] transition-colors">INFOLOB</h3>
+                                <span class="text-sm text-gray-500">May – Aug 2025</span>
+                            </div>
+                            <p class="text-gray-400">Software Development Engineer Intern — AWS Bedrock, MCP Server</p>
+                        </div>
+                        <div class="flex items-center gap-8">
+                            <div class="hidden md:block text-right">
+                                <p class="text-2xl font-bold text-[#ff3b30]">+33%</p>
+                                <p class="text-xs text-gray-500 uppercase tracking-widest">Success Rate</p>
+                            </div>
+                            <div class="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center group-hover:bg-[#ff3b30] group-hover:border-[#ff3b30] transition-all">
+                                <i data-lucide="arrow-up-right" class="w-5 h-5 group-hover:text-white transition-colors"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-6 grid md:grid-cols-3 gap-4 text-sm text-gray-400 max-w-3xl">
+                        <p>• Architected production backend on MCP server</p>
+                        <p>• +40% uptime via automated fallback logic</p>
+                        <p>• -28% inference costs optimization</p>
+                    </div>
+                </div>
+                <!-- NYU Research Project -->
+                <div class="group border-t border-white/10 py-8 md:py-12 reveal cursor-pointer hover:bg-white/5 transition-colors px-6 -mx-6">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                        <div class="flex-1">
+                            <div class="flex items-center gap-4 mb-2">
+                                <h3 class="font-display text-2xl md:text-4xl font-bold group-hover:text-[#ff3b30] transition-colors">NYU Research</h3>
+                                <span class="text-sm text-gray-500">Jan – May 2025</span>
+                            </div>
+                            <p class="text-gray-400">Django Migration Project — Faculty Research Assistant</p>
+                        </div>
+                        <div class="flex items-center gap-8">
+                            <div class="hidden md:block text-right">
+                                <p class="text-2xl font-bold text-[#ff3b30]">Legacy</p>
+                                <p class="text-xs text-gray-500 uppercase tracking-widest">Modernized</p>
+                            </div>
+                            <div class="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center group-hover:bg-[#ff3b30] group-hover:border-[#ff3b30] transition-all">
+                                <i data-lucide="arrow-up-right" class="w-5 h-5 group-hover:text-white transition-colors"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-6 grid md:grid-cols-3 gap-4 text-sm text-gray-400 max-w-3xl">
+                        <p>• Migrated legacy Python CGI to Django web application</p>
+                        <p>• Deployed on NYU workshop server using Apache + mod_wsgi</p>
+                        <p>• Improved maintainability and runtime performance</p>
+                    </div>
+                </div>
+
+                <!-- INFOTECH LABS -->
+                <div class="group border-t border-white/10 py-8 md:py-12 reveal cursor-pointer hover:bg-white/5 transition-colors px-6 -mx-6">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                        <div class="flex-1">
+                            <div class="flex items-center gap-4 mb-2">
+                                <h3 class="font-display text-2xl md:text-4xl font-bold group-hover:text-[#ff3b30] transition-colors">INFOTECH LABS</h3>
+                                <span class="text-sm text-gray-500">May – Jul 2024</span>
+                            </div>
+                            <p class="text-gray-400">Software Engineering Intern — Data Analytics, Power BI</p>
+                        </div>
+                        <div class="flex items-center gap-8">
+                            <div class="hidden md:block text-right">
+                                <p class="text-2xl font-bold text-[#ff3b30]">+20%</p>
+                                <p class="text-xs text-gray-500 uppercase tracking-widest">Insight Delivery</p>
+                            </div>
+                            <div class="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center group-hover:bg-[#ff3b30] group-hover:border-[#ff3b30] transition-all">
+                                <i data-lucide="arrow-up-right" class="w-5 h-5 group-hover:text-white transition-colors"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-6 grid md:grid-cols-3 gap-4 text-sm text-gray-400 max-w-3xl">
+                        <p>• Interactive Power BI dashboards with DAX/SQL</p>
+                        <p>• +15% KPI uplift via data analysis</p>
+                        <p>• +30% reporting accuracy improvement</p>
+                    </div>
+                </div>
+
+                <!-- P99SOFT -->
+                <div class="group border-t border-b border-white/10 py-8 md:py-12 reveal cursor-pointer hover:bg-white/5 transition-colors px-6 -mx-6">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                        <div class="flex-1">
+                            <div class="flex items-center gap-4 mb-2">
+                                <h3 class="font-display text-2xl md:text-4xl font-bold group-hover:text-[#ff3b30] transition-colors">P99SOFT</h3>
+                                <span class="text-sm text-gray-500">May – Jul 2023</span>
+                            </div>
+                            <p class="text-gray-400">Software Development Engineer Intern — Full Stack, Django</p>
+                        </div>
+                        <div class="flex items-center gap-8">
+                            <div class="hidden md:block text-right">
+                                <p class="text-2xl font-bold text-[#ff3b30]">-25%</p>
+                                <p class="text-xs text-gray-500 uppercase tracking-widest">Processing Time</p>
+                            </div>
+                            <div class="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center group-hover:bg-[#ff3b30] group-hover:border-[#ff3b30] transition-all">
+                                <i data-lucide="arrow-up-right" class="w-5 h-5 group-hover:text-white transition-colors"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-6 grid md:grid-cols-3 gap-4 text-sm text-gray-400 max-w-3xl">
+                        <p>• Full-stack Django-MySQL platform</p>
+                        <p>• Scalable APIs with async task queues</p>
+                        <p>• +50% throughput without latency</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-32 px-6 bg-[#0f0f0f]">
+        <div class="max-w-[1800px] mx-auto">
+            <div class="grid md:grid-cols-12 gap-12 md:gap-20">
+                <div class="md:col-span-5 reveal">
+                    <p class="text-sm uppercase tracking-[0.3em] text-gray-500 mb-4">02 — About</p>
+                    <h2 class="font-display text-5xl md:text-6xl font-bold leading-tight">
+                        Building the future with code & intelligence
+                    </h2>
+                </div>
+                <div class="md:col-span-7 space-y-8 reveal">
+                    <p class="text-xl md:text-2xl text-gray-300 leading-relaxed font-light">
+                        I'm a <span class="text-white font-normal">Computer Engineering Master's student</span> at New York University, 
+                        passionate about the intersection of software engineering and artificial intelligence.
+                    </p>
+                    <p class="text-gray-400 leading-relaxed">
+                        My experience spans from architecting production-grade backend systems with AWS Bedrock to creating 
+                        data-driven analytics solutions. I specialize in optimizing performance, reducing costs, and building 
+                        scalable infrastructure that delivers real impact.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Education -->
+            <div class="mt-20 pt-20 border-t border-white/10">
+                <p class="text-sm uppercase tracking-[0.3em] text-gray-500 mb-12 reveal">Education</p>
+                
+                <div class="grid md:grid-cols-2 gap-8">
+                    <!-- NYU -->
+                    <div class="bg-[#141414] rounded-lg p-8 reveal hover:bg-[#1a1a1a] transition-colors">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <h3 class="font-display text-2xl font-bold mb-1">New York University</h3>
+                                <p class="text-gray-400">Master of Science in Computer Engineering</p>
+                            </div>
+                            <span class="text-sm text-gray-500">2024 — 2026</span>
+                        </div>
+                        <p class="text-sm text-gray-500 mb-4">New York, USA</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-3 py-1 bg-white/5 rounded-full text-xs">Machine Learning</span>
+                            <span class="px-3 py-1 bg-white/5 rounded-full text-xs">Deep Learning</span>
+                            <span class="px-3 py-1 bg-white/5 rounded-full text-xs">Reinforcement Learning</span>
+                            <span class="px-3 py-1 bg-white/5 rounded-full text-xs">Big Data</span>
+                            <span class="px-3 py-1 bg-white/5 rounded-full text-xs">System Architecture</span>
+                            <span class="px-3 py-1 bg-white/5 rounded-full text-xs">Advanced Python</span>
+                        </div>
+                    </div>
+
+                    <!-- GITAM -->
+                    <div class="bg-[#141414] rounded-lg p-8 reveal hover:bg-[#1a1a1a] transition-colors">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <h3 class="font-display text-2xl font-bold mb-1">GITAM University</h3>
+                                <p class="text-gray-400">Bachelor of Technology in Computer Science</p>
+                            </div>
+                            <span class="text-sm text-gray-500">2020 — 2024</span>
+                        </div>
+                        <p class="text-sm text-gray-500 mb-4">Visakhapatnam, India</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-3 py-1 bg-white/5 rounded-full text-xs">Design and Analysis of Algorithms</span>
+                            <span class="px-3 py-1 bg-white/5 rounded-full text-xs">Operating Systems</span>
+                            <span class="px-3 py-1 bg-white/5 rounded-full text-xs">Database Management Systems</span>
+                            <span class="px-3 py-1 bg-white/5 rounded-full text-xs">Data Structures</span>
+                            <span class="px-3 py-1 bg-white/5 rounded-full text-xs">Machine Learning</span>
+                            <span class="px-3 py-1 bg-white/5 rounded-full text-xs">Natural Language Processing</span>
+                            <span class="px-3 py-1 bg-white/5 rounded-full text-xs">Statistics and Probability</span>
+                            <span class="px-3 py-1 bg-white/5 rounded-full text-xs">Differential and Integral Calculus</span>
+                            <span class="px-3 py-1 bg-white/5 rounded-full text-xs">Discrete Mathematics</span>
+                            <span class="px-3 py-1 bg-white/5 rounded-full text-xs">Numerical Methods</span>
+                            <span class="px-3 py-1 bg-white/5 rounded-full text-xs">Organizational Behavior</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section - 3D Rotating Globe -->
+<section id="skills" class="py-32 px-6 overflow-hidden">
+    <div class="max-w-[1800px] mx-auto">
+        <div class="text-center mb-16 reveal">
+            <p class="text-sm uppercase tracking-[0.3em] text-gray-500 mb-4">03 — Skills</p>
+            <h2 class="font-display text-5xl md:text-7xl font-bold mb-4">Technical<br>Universe</h2>
+            <p class="text-gray-400 max-w-md mx-auto">Hover to pause rotation. Click skills to highlight.</p>
+        </div>
+
+        <!-- 3D Globe Container -->
+        <div class="skills-globe-container reveal">
+            <div class="skills-globe" id="skillsGlobe">
+                <div class="globe-core"></div>
+            </div>
+        </div>
+
+        <!-- Legend -->
+        <div class="flex flex-wrap justify-center gap-6 mt-12 reveal">
+            <div class="flex items-center gap-2">
+                <span class="w-3 h-3 rounded-full" style="background: #3b82f6"></span>
+                <span class="text-sm text-gray-400">Languages</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="w-3 h-3 rounded-full" style="background: #a855f7"></span>
+                <span class="text-sm text-gray-400">AI/ML</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="w-3 h-3 rounded-full" style="background: #22c55e"></span>
+                <span class="text-sm text-gray-400">Backend</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="w-3 h-3 rounded-full" style="background: #f97316"></span>
+                <span class="text-sm text-gray-400">Databases</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="w-3 h-3 rounded-full" style="background: #ec4899"></span>
+                <span class="text-sm text-gray-400">Cloud/DevOps</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="w-3 h-3 rounded-full" style="background: #6b7280"></span>
+                <span class="text-sm text-gray-400">Tools</span>
+            </div>
+        </div>
+
+        <!-- Certifications -->
+        <div class="mt-20 pt-12 border-t border-white/10 reveal">
+            <h3 class="text-sm uppercase tracking-[0.3em] text-gray-500 mb-8 text-center">Certifications</h3>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="group p-6 bg-[#141414] rounded-lg hover:bg-[#1a1a1a] transition-all cursor-pointer border border-transparent hover:border-[#ff3b30]/30 text-center">
+                    <i data-lucide="award" class="w-8 h-8 text-[#ff3b30] mb-4 mx-auto group-hover:scale-110 transition-transform"></i>
+                    <p class="font-medium mb-1 text-sm">Data Analysis with Python</p>
+                    <p class="text-xs text-gray-500">IBM</p>
+                </div>
+                <div class="group p-6 bg-[#141414] rounded-lg hover:bg-[#1a1a1a] transition-all cursor-pointer border border-transparent hover:border-[#ff3b30]/30 text-center">
+                    <i data-lucide="award" class="w-8 h-8 text-[#ff3b30] mb-4 mx-auto group-hover:scale-110 transition-transform"></i>
+                    <p class="font-medium mb-1 text-sm">Python Data Structures</p>
+                    <p class="text-xs text-gray-500">University of Michigan</p>
+                </div>
+                <div class="group p-6 bg-[#141414] rounded-lg hover:bg-[#1a1a1a] transition-all cursor-pointer border border-transparent hover:border-[#ff3b30]/30 text-center">
+                    <i data-lucide="award" class="w-8 h-8 text-[#ff3b30] mb-4 mx-auto group-hover:scale-110 transition-transform"></i>
+                    <p class="font-medium mb-1 text-sm">Google Data Analytics</p>
+                    <p class="text-xs text-gray-500">Google</p>
+                </div>
+                <div class="group p-6 bg-[#141414] rounded-lg hover:bg-[#1a1a1a] transition-all cursor-pointer border border-transparent hover:border-[#ff3b30]/30 text-center">
+                    <i data-lucide="award" class="w-8 h-8 text-[#ff3b30] mb-4 mx-auto group-hover:scale-110 transition-transform"></i>
+                    <p class="font-medium mb-1 text-sm">Data Visualization</p>
+                    <p class="text-xs text-gray-500">UC Davis</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+    <!-- Projects Section - 7 Projects -->
+    <section id="projects" class="py-32 px-6 bg-[#0f0f0f]">
+        <div class="max-w-[1800px] mx-auto">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-20 reveal">
+                <div>
+                    <p class="text-sm uppercase tracking-[0.3em] text-gray-500 mb-4">04 — Projects</p>
+                    <h2 class="font-display text-5xl md:text-7xl font-bold">Featured<br>Work</h2>
+                </div>
+                <a href="https://github.com" target="_blank" class="mt-6 md:mt-0 text-sm uppercase tracking-widest link-hover flex items-center gap-2">
+                    View GitHub
+                    <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
+                </a>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Project 1: Research Agent -->
+                <div class="project-card rounded-lg reveal group cursor-pointer" onclick="showProject('research')">
+                    <div class="aspect-video bg-[#1a1a1a] relative overflow-hidden">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <i data-lucide="search" class="w-16 h-16 text-gray-700 group-hover:text-[#ff3b30] transition-colors"></i>
+                        </div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-display text-lg font-bold mb-2">Autonomous Multi-Agent Research System</h3>
+                        <p class="text-gray-400 text-sm mb-4">LangGraph-based multi-agent RAG system with self-critique and citation-backed summaries.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="text-xs px-2 py-1 bg-white/5 rounded">LangGraph</span>
+                            <span class="text-xs px-2 py-1 bg-white/5 rounded">FastAPI</span>
+                            <span class="text-xs px-2 py-1 bg-white/5 rounded">Qdrant</span>
+                            <span class="text-xs px-2 py-1 bg-white/5 rounded">RAG</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 2: Model Inference Server -->
+                <div class="project-card rounded-lg reveal group cursor-pointer" onclick="showProject('inference')">
+                    <div class="aspect-video bg-[#1a1a1a] relative overflow-hidden">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <i data-lucide="cpu" class="w-16 h-16 text-gray-700 group-hover:text-[#ff3b30] transition-colors"></i>
+                        </div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-display text-lg font-bold mb-2">Model Inference Server</h3>
+                        <p class="text-gray-400 text-sm mb-4">High-performance inference for Llama 2-7B with ONNX Runtime optimizations.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="text-xs px-2 py-1 bg-white/5 rounded">PyTorch</span>
+                            <span class="text-xs px-2 py-1 bg-white/5 rounded">FastAPI</span>
+                            <span class="text-xs px-2 py-1 bg-white/5 rounded">ONNX</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 3: Backtesting -->
+                <div class="project-card rounded-lg reveal group cursor-pointer" onclick="showProject('backtesting')">
+                    <div class="aspect-video bg-[#1a1a1a] relative overflow-hidden">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <i data-lucide="trending-up" class="w-16 h-16 text-gray-700 group-hover:text-[#ff3b30] transition-colors"></i>
+                        </div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-display text-lg font-bold mb-2">Systematic Backtesting Platform</h3>
+                        <p class="text-gray-400 text-sm mb-4">ML + technical indicator backtesting across Indian equities with dynamic rebalancing.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="text-xs px-2 py-1 bg-white/5 rounded">Flask</span>
+                            <span class="text-xs px-2 py-1 bg-white/5 rounded">Scikit-Learn</span>
+                            <span class="text-xs px-2 py-1 bg-white/5 rounded">yfinance</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 4: Trading Sentiment -->
+                <div class="project-card rounded-lg reveal group cursor-pointer" onclick="showProject('sentiment')">
+                    <div class="aspect-video bg-[#1a1a1a] relative overflow-hidden">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <i data-lucide="newspaper" class="w-16 h-16 text-gray-700 group-hover:text-[#ff3b30] transition-colors"></i>
+                        </div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-display text-lg font-bold mb-2">Real-Time Trading Signals</h3>
+                        <p class="text-gray-400 text-sm mb-4">NLP sentiment analysis on RSS feeds with live WebSocket dashboards.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="text-xs px-2 py-1 bg-white/5 rounded">FastAPI</span>
+                            <span class="text-xs px-2 py-1 bg-white/5 rounded">React</span>
+                            <span class="text-xs px-2 py-1 bg-white/5 rounded">DistilRoBERTa</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 5: Taylrd (Old) -->
+                <div class="project-card rounded-lg reveal group cursor-pointer" onclick="showProject('taylrd')">
+                    <div class="aspect-video bg-[#1a1a1a] relative overflow-hidden">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <i data-lucide="file-text" class="w-16 h-16 text-gray-700 group-hover:text-[#ff3b30] transition-colors"></i>
+                        </div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-display text-lg font-bold mb-2">Taylrd</h3>
+                        <p class="text-gray-400 text-sm mb-4">AI-powered resume generator with LaTeX PDF output and ATS optimization.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="text-xs px-2 py-1 bg-white/5 rounded">Python</span>
+                            <span class="text-xs px-2 py-1 bg-white/5 rounded">Flask</span>
+                            <span class="text-xs px-2 py-1 bg-white/5 rounded">LaTeX</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 6: SaaS Automation (Old) -->
+                <div class="project-card rounded-lg reveal group cursor-pointer" onclick="showProject('saas')">
+                    <div class="aspect-video bg-[#1a1a1a] relative overflow-hidden">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <i data-lucide="layout" class="w-16 h-16 text-gray-700 group-hover:text-[#ff3b30] transition-colors"></i>
+                        </div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-display text-lg font-bold mb-2">SaaS Automation Builder</h3>
+                        <p class="text-gray-400 text-sm mb-4">Multi-tenant automation platform with custom integration flows.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="text-xs px-2 py-1 bg-white/5 rounded">Next.js</span>
+                            <span class="text-xs px-2 py-1 bg-white/5 rounded">TypeScript</span>
+                            <span class="text-xs px-2 py-1 bg-white/5 rounded">Prisma</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 7: Soundmix (Old) -->
+                <div class="project-card rounded-lg reveal group cursor-pointer" onclick="showProject('soundmix')">
+                    <div class="aspect-video bg-[#1a1a1a] relative overflow-hidden">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <i data-lucide="music" class="w-16 h-16 text-gray-700 group-hover:text-[#ff3b30] transition-colors"></i>
+                        </div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-display text-lg font-bold mb-2">Soundmix</h3>
+                        <p class="text-gray-400 text-sm mb-4">Emotion-based music web app with social features and Firebase backend.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="text-xs px-2 py-1 bg-white/5 rounded">React</span>
+                            <span class="text-xs px-2 py-1 bg-white/5 rounded">Flask</span>
+                            <span class="text-xs px-2 py-1 bg-white/5 rounded">Firebase</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-32 px-6">
+        <div class="max-w-[1800px] mx-auto">
+            <div class="grid md:grid-cols-2 gap-20">
+                <div class="reveal">
+                    <p class="text-sm uppercase tracking-[0.3em] text-gray-500 mb-4">05 — Contact</p>
+                    <h2 class="font-display text-5xl md:text-7xl font-bold mb-8">Let's work<br>together</h2>
+                    <p class="text-gray-400 text-lg mb-12 max-w-md">
+                        Open to opportunities in Software Engineering, AI/ML, and Backend Development.
+                    </p>
+                    
+                    <div class="space-y-6">
+                        <a href="mailto:ad7647@nyu.edu" class="flex items-center gap-4 group">
+                            <div class="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center group-hover:bg-[#ff3b30] group-hover:border-[#ff3b30] transition-all">
+                                <i data-lucide="mail" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500 uppercase tracking-widest mb-1">Email</p>
+                                <p class="text-lg group-hover:text-[#ff3b30] transition-colors">ad7647@nyu.edu</p>
+                            </div>
+                        </a>
+                        
+                        <a href="tel:+12016409986" class="flex items-center gap-4 group">
+                            <div class="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center group-hover:bg-[#ff3b30] group-hover:border-[#ff3b30] transition-all">
+                                <i data-lucide="phone" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500 uppercase tracking-widest mb-1">Phone</p>
+                                <p class="text-lg group-hover:text-[#ff3b30] transition-colors">+1 (201) 640-9986</p>
+                            </div>
+                        </a>
+                        
+                        <a href="https://www.linkedin.com/in/anvesh-varma-2b0747249/" target="_blank" class="flex items-center gap-4 group">
+                            <div class="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center group-hover:bg-[#ff3b30] group-hover:border-[#ff3b30] transition-all">
+                                <i data-lucide="linkedin" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500 uppercase tracking-widest mb-1">LinkedIn</p>
+                                <p class="text-lg group-hover:text-[#ff3b30] transition-colors">/in/anvesh-varma</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                 
+
+                <div class="reveal">
+                    <form class="space-y-6" onsubmit="event.preventDefault(); alert('Message sent!');">
+                        <div>
+                            <label class="block text-sm uppercase tracking-widest text-gray-500 mb-3">Name</label>
+                            <input type="text" class="w-full bg-transparent border-b border-white/20 py-4 focus:outline-none focus:border-[#ff3b30] transition-colors text-lg" placeholder="anvesh-varma">
+                        </div>
+                        <div>
+                            <label class="block text-sm uppercase tracking-widest text-gray-500 mb-3">Email</label>
+                            <input type="email" class="w-full bg-transparent border-b border-white/20 py-4 focus:outline-none focus:border-[#ff3b30] transition-colors text-lg" placeholder="aexample.com">
+                        </div>
+                        <div>
+                            <label class="block text-sm uppercase tracking-widest text-gray-500 mb-3">Message</label>
+                            <textarea rows="4" class="w-full bg-transparent border-b border-white/20 py-4 focus:outline-none focus:border-[#ff3b30] transition-colors text-lg resize-none" placeholder="Tell me about your project..."></textarea>
+                        </div>
+                        <button type="submit" class="magnetic-btn mt-8">
+                            <span class="text-sm uppercase tracking-widest">Send</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-8 px-6 border-t border-white/10">
+        <div class="max-w-[1800px] mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+            <p class="text-sm text-gray-500">© 2025 Anvesh Varma Dantuluri. All rights reserved.</p>
+            <div class="flex gap-6">
+                <a href="https://github.com/Anveshvarmad" target="_blank" class="text-gray-500 hover:text-white transition-colors">
+                    <i data-lucide="github" class="w-5 h-5"></i>
+                </a>
+                <a href="https://www.linkedin.com/in/anvesh-varma-2b0747249/" target="_blank" class="text-gray-500 hover:text-white transition-colors">
+                    <i data-lucide="linkedin" class="w-5 h-5"></i>
+                </a>
+                <a href="mailto:ad7647@nyu.edu" class="text-gray-500 hover:text-white transition-colors">
+                    <i data-lucide="mail" class="w-5 h-5"></i>
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Project Modal -->
+    <div id="project-modal" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 bg-black/90 backdrop-blur-sm" onclick="closeProject()"></div>
+        <div class="absolute inset-0 flex items-center justify-center p-6 pointer-events-none">
+            <div class="bg-[#141414] rounded-lg max-w-2xl w-full p-8 pointer-events-auto transform scale-95 opacity-0 transition-all duration-500" id="modal-content">
+                <div class="flex justify-between items-start mb-6">
+                    <h3 id="modal-title" class="font-display text-3xl font-bold">Project</h3>
+                    <button onclick="closeProject()" class="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center hover:bg-[#ff3b30] hover:border-[#ff3b30] transition-all">
+                        <i data-lucide="x" class="w-5 h-5"></i>
+                    </button>
+                </div>
+                <div id="modal-body" class="text-gray-400 leading-relaxed"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        // Custom cursor
+        const cursorDot = document.querySelector('.cursor-dot');
+        const cursorOutline = document.querySelector('.cursor-outline');
+        
+        window.addEventListener('mousemove', (e) => {
+            const posX = e.clientX;
+            const posY = e.clientY;
+            
+            cursorDot.style.left = `${posX}px`;
+            cursorDot.style.top = `${posY}px`;
+            
+            cursorOutline.animate({
+                left: `${posX}px`,
+                top: `${posY}px`
+            }, { duration: 500, fill: "forwards" });
+        });
+
+        document.querySelectorAll('a, button, .project-card, .magnetic-btn, .skill-orb').forEach(el => {
+            el.addEventListener('mouseenter', () => cursorOutline.classList.add('hover'));
+            el.addEventListener('mouseleave', () => cursorOutline.classList.remove('hover'));
+        });
+
+        function toggleMenu() {
+            const menu = document.getElementById('mobile-menu');
+            const line1 = document.querySelector('.menu-line-1');
+            const line2 = document.querySelector('.menu-line-2');
+            
+            menu.classList.toggle('open');
+            
+            if (menu.classList.contains('open')) {
+                line1.style.transform = 'rotate(45deg) translate(5px, 5px)';
+                line2.style.transform = 'rotate(-45deg) translate(5px, -5px)';
+            } else {
+                line1.style.transform = 'none';
+                line2.style.transform = 'none';
+            }
+        }
+
+        // Scroll reveal
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // Skills data
+const skillsData = [
+    // Languages - Blue
+    { name: 'Python', color: '#3b82f6' },
+    { name: 'Java', color: '#3b82f6' },
+    { name: 'C++', color: '#3b82f6' },
+    { name: 'Go', color: '#3b82f6' },
+    { name: 'SQL', color: '#3b82f6' },
+    { name: 'JavaScript', color: '#3b82f6' },
+    { name: 'TypeScript', color: '#3b82f6' },
+    { name: 'Bash', color: '#3b82f6' },
+    
+    // AI/ML - Purple
+    { name: 'Machine Learning', color: '#a855f7' },
+    { name: 'Deep Learning', color: '#a855f7' },
+    { name: 'Reinforcement Learning', color: '#a855f7' },
+    { name: 'NLP', color: '#a855f7' },
+    { name: 'Computer Vision', color: '#a855f7' },
+    { name: 'AWS Bedrock', color: '#a855f7' },
+    { name: 'TensorFlow', color: '#a855f7' },
+    { name: 'PyTorch', color: '#a855f7' },
+    { name: 'Scikit-Learn', color: '#a855f7' },
+    { name: 'RAG', color: '#a855f7' },
+    { name: 'LangGraph', color: '#a855f7' },
+    { name: 'Hugging Face', color: '#a855f7' },
+
+    { name: 'DistilRoBERTa', color: '#a855f7' },
+    { name: 'Big Data', color: '#a855f7' },
+
+    { name: 'Tableau', color: '#a855f7' },
+    
+    // Backend - Green
+    { name: 'Django', color: '#22c55e' },
+    { name: 'Flask', color: '#22c55e' },
+    { name: 'FastAPI', color: '#22c55e' },
+    { name: 'Node.js', color: '#22c55e' },
+    { name: 'Express.js', color: '#22c55e' },
+    { name: 'RESTful APIs', color: '#22c55e' },
+
+    { name: 'Apache', color: '#22c55e' },
+    { name: 'React', color: '#22c55e' },
+    { name: 'Next.js', color: '#22c55e' },
+
+    
+    // Databases - Orange
+    { name: 'MySQL', color: '#f97316' },
+    { name: 'PostgreSQL', color: '#f97316' },
+    { name: 'MongoDB', color: '#f97316' },
+    { name: 'Redis', color: '#f97316' },
+    { name: 'NeonDB', color: '#f97316' },
+    { name: 'Firebase', color: '#f97316' },
+    { name: 'Qdrant', color: '#f97316' },
+    { name: 'Vector DB', color: '#f97316' },
+    
+    // Cloud/DevOps - Pink
+
+    { name: 'AWS Lambda', color: '#ec4899' },
+    { name: 'Docker', color: '#ec4899' },
+    { name: 'Kubernetes', color: '#ec4899' },
+    { name: 'CI/CD', color: '#ec4899' },
+
+    // Tools - Gray
+    { name: 'Linux', color: '#6b7280' },
+
+    { name: 'Git', color: '#6b7280' },
+    { name: 'Multithreading', color: '#6b7280' },
+    { name: 'Concurrency', color: '#6b7280' },
+    { name: 'Memory Management', color: '#6b7280' },
+    { name: 'System Design', color: '#6b7280' },
+    { name: 'Unit Testing', color: '#6b7280' },
+    { name: 'Integration Testing', color: '#6b7280' },
+    { name: 'Debugging', color: '#6b7280' },
+    { name: 'Pandas', color: '#6b7280' },
+    { name: 'NumPy', color: '#6b7280' },
+    { name: 'Matplotlib', color: '#6b7280' },
+    
+];
+
+// Create 3D globe
+const globe = document.getElementById('skillsGlobe');
+const radius = 220;
+const totalSkills = skillsData.length;
+
+skillsData.forEach((skill, index) => {
+    const orb = document.createElement('div');
+    orb.className = 'skill-orb';
+    orb.textContent = skill.name;
+    orb.style.borderColor = skill.color;
+    orb.style.color = skill.color;
+    
+    // Fibonacci sphere distribution
+    const phi = Math.acos(1 - 2 * (index + 0.5) / totalSkills);
+    const theta = Math.PI * (1 + Math.sqrt(5)) * (index + 0.5);
+    
+    const x = radius * Math.sin(phi) * Math.cos(theta);
+    const y = radius * Math.sin(phi) * Math.sin(theta);
+    const z = radius * Math.cos(phi);
+    
+    orb.style.transform = `translate3d(${250 + x}px, ${250 + y}px, ${z}px)`;
+    
+    // Store original position for click animation
+    orb.dataset.x = 250 + x;
+    orb.dataset.y = 250 + y;
+    orb.dataset.z = z;
+    
+    // Click to highlight
+    orb.addEventListener('click', function() {
+        const originalTransform = `translate3d(${this.dataset.x}px, ${this.dataset.y}px, ${this.dataset.z}px)`;
+        this.style.transform = originalTransform + ' scale(1.3)';
+        this.style.background = skill.color + '33';
+        setTimeout(() => {
+            this.style.transform = originalTransform + ' scale(1)';
+            this.style.background = 'rgba(20, 20, 20, 0.9)';
+        }, 300);
+    });
+    
+    globe.appendChild(orb);
+});
+  
+
+        // Project modal
+        const projects = {
+            research: {
+                title: 'Autonomous Multi-Agent Research System',
+                content: `
+                    <p class="mb-6">A sophisticated LangGraph-based multi-agent RAG system that autonomously plans research queries, retrieves relevant evidence from multiple sources, synthesizes comprehensive outputs, and self-critiques to produce citation-backed research summaries.</p>
+                    <div class="grid grid-cols-2 gap-4 mb-6">
+                        <div class="p-4 bg-white/5 rounded">
+                            <p class="text-3xl font-display font-bold text-[#ff3b30]">Multi-Agent</p>
+                            <p class="text-sm text-gray-500">Architecture</p>
+                        </div>
+                        <div class="p-4 bg-white/5 rounded">
+                            <p class="text-3xl font-display font-bold text-[#ff3b30]">RAG</p>
+                            <p class="text-sm text-gray-500">Retrieval System</p>
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-3 py-1 bg-white/5 rounded-full text-sm">LangGraph</span>
+                        <span class="px-3 py-1 bg-white/5 rounded-full text-sm">FastAPI</span>
+                        <span class="px-3 py-1 bg-white/5 rounded-full text-sm">Qdrant</span>
+                        <span class="px-3 py-1 bg-white/5 rounded-full text-sm">Streamlit</span>
+                    </div>
+                `
+            },
+            inference: {
+                title: 'Model Inference Server',
+                content: `
+                    <p class="mb-6">High-performance inference service optimized for Llama 2-7B deployment featuring intelligent batching, response caching, and ONNX Runtime optimizations for production-scale LLM serving.</p>
+                    <div class="grid grid-cols-2 gap-4 mb-6">
+                        <div class="p-4 bg-white/5 rounded">
+                            <p class="text-3xl font-display font-bold text-[#ff3b30]">ONNX</p>
+                            <p class="text-sm text-gray-500">Runtime Optimized</p>
+                        </div>
+                        <div class="p-4 bg-white/5 rounded">
+                            <p class="text-3xl font-display font-bold text-[#ff3b30]">7B</p>
+                            <p class="text-sm text-gray-500">Parameters</p>
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-3 py-1 bg-white/5 rounded-full text-sm">PyTorch</span>
+                        <span class="px-3 py-1 bg-white/5 rounded-full text-sm">FastAPI</span>
+                        <span class="px-3 py-1 bg-white/5 rounded-full text-sm">ONNX Runtime</span>
+                    </div>
+                `
+            },
+            backtesting: {
+                title: 'Systematic Backtesting Platform',
+                content: `
+                    <p class="mb-6">Comprehensive automated trading strategy research platform that backtests machine learning models combined with technical indicators across Indian equity markets with dynamic portfolio rebalancing capabilities.</p>
+                    <div class="grid grid-cols-2 gap-4 mb-6">
+                        <div class="p-4 bg-white/5 rounded">
+                            <p class="text-3xl font-display font-bold text-[#ff3b30]">ML + TA</p>
+                            <p class="text-sm text-gray-500">Hybrid Strategies</p>
+                        </div>
+                        <div class="p-4 bg-white/5 rounded">
+                            <p class="text-3xl font-display font-bold text-[#ff3b30]">Dynamic</p>
+                            <p class="text-sm text-gray-500">Rebalancing</p>
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-3 py-1 bg-white/5 rounded-full text-sm">Flask</span>
+                        <span class="px-3 py-1 bg-white/5 rounded-full text-sm">Scikit-Learn</span>
+                        <span class="px-3 py-1 bg-white/5 rounded-full text-sm">yfinance</span>
+                        <span class="px-3 py-1 bg-white/5 rounded-full text-sm">RSI/MACD</span>
+                    </div>
+                `
+            },
+            sentiment: {
+                title: 'Real-Time Trading Signal Generation',
+                content: `
+                    <p class="mb-6">AI-powered financial intelligence platform that ingests real-time news from RSS feeds, performs NLP sentiment analysis using DistilRoBERTa, and generates actionable trading signals with live WebSocket dashboards.</p>
+                    <div class="grid grid-cols-2 gap-4 mb-6">
+                        <div class="p-4 bg-white/5 rounded">
+                            <p class="text-3xl font-display font-bold text-[#ff3b30]">Real-Time</p>
+                            <p class="text-sm text-gray-500">Signal Generation</p>
+                        </div>
+                        <div class="p-4 bg-white/5 rounded">
+                            <p class="text-3xl font-display font-bold text-[#ff3b30]">NLP</p>
+                            <p class="text-sm text-gray-500">Sentiment Analysis</p>
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-3 py-1 bg-white/5 rounded-full text-sm">FastAPI</span>
+                        <span class="px-3 py-1 bg-white/5 rounded-full text-sm">React</span>
+                        <span class="px-3 py-1 bg-white/5 rounded-full text-sm">DistilRoBERTa</span>
+                        <span class="px-3 py-1 bg-white/5 rounded-full text-sm">WebSockets</span>
+                    </div>
+                `
+            },
+            taylrd: {
+                title: 'Taylrd',
+                content: `
+                    <p class="mb-6">AI-powered resume and cover letter generator that creates tailored application materials with professional LaTeX PDF output and ATS keyword optimization.</p>
+                    <div class="grid grid-cols-2 gap-4 mb-6">
+                        <div class="p-4 bg-white/5 rounded">
+                            <p class="text-3xl font-display font-bold text-[#ff3b30]">95%</p>
+                            <p class="text-sm text-gray-500">Keyword Match</p>
+                        </div>
+                        <div class="p-4 bg-white/5 rounded">
+                            <p class="text-3xl font-display font-bold text-[#ff3b30]">-90%</p>
+                            <p class="text-sm text-gray-500">Effort Reduction</p>
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-3 py-1 bg-white/5 rounded-full text-sm">Python</span>
+                        <span class="px-3 py-1 bg-white/5 rounded-full text-sm">Flask</span>
+                        <span class="px-3 py-1 bg-white/5 rounded-full text-sm">LaTeX</span>
+                        <span class="px-3 py-1 bg-white/5 rounded-full text-sm">NLP</span>
+                    </div>
+                `
+            },
+            saas: {
+                title: 'SaaS Automation Builder',
+                content: `
+                    <p class="mb-6">A multi-tenant SaaS platform enabling businesses to build custom automation workflows with an intuitive visual interface and scalable B2C infrastructure.</p>
+                    <div class="grid grid-cols-2 gap-4 mb-6">
+                        <div class="p-4 bg-white/5 rounded">
+                            <p class="text-3xl font-display font-bold text-[#ff3b30]">95%</p>
+                            <p class="text-sm text-gray-500">Test Coverage</p>
+                        </div>
+                        <div class="p-4 bg-white/5 rounded">
+                            <p class="text-3xl font-display font-bold text-[#ff3b30]">Multi-Tenant</p>
+                            <p class="text-sm text-gray-500">Architecture</p>
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-3 py-1 bg-white/5 rounded-full text-sm">Next.js</span>
+                        <span class="px-3 py-1 bg-white/5 rounded-full text-sm">TypeScript</span>
+                        <span class="px-3 py-1 bg-white/5 rounded-full text-sm">Prisma</span>
+                        <span class="px-3 py-1 bg-white/5 rounded-full text-sm">NeonDB</span>
+                    </div>
+                `
+            },
+            soundmix: {
+                title: 'Soundmix',
+                content: `
+                    <p class="mb-6">A full-stack music web application featuring emotion-based playlist personalization, social sharing capabilities, and real-time Firebase backend.</p>
+                    <div class="grid grid-cols-2 gap-4 mb-6">
+                        <div class="p-4 bg-white/5 rounded">
+                            <p class="text-3xl font-display font-bold text-[#ff3b30]">500+</p>
+                            <p class="text-sm text-gray-500">Active Users</p>
+                        </div>
+                        <div class="p-4 bg-white/5 rounded">
+                            <p class="text-3xl font-display font-bold text-[#ff3b30]">+30%</p>
+                            <p class="text-sm text-gray-500">Engagement Boost</p>
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-3 py-1 bg-white/5 rounded-full text-sm">React</span>
+                        <span class="px-3 py-1 bg-white/5 rounded-full text-sm">Flask</span>
+                        <span class="px-3 py-1 bg-white/5 rounded-full text-sm">Firebase</span>
+                        <span class="px-3 py-1 bg-white/5 rounded-full text-sm">Spotify API</span>
+                    </div>
+                `
+            }
+        };
+
+        function showProject(id) {
+            const modal = document.getElementById('project-modal');
+            const content = document.getElementById('modal-content');
+            const title = document.getElementById('modal-title');
+            const body = document.getElementById('modal-body');
+            
+            const p = projects[id];
+            title.textContent = p.title;
+            body.innerHTML = p.content;
+            
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                content.classList.remove('scale-95', 'opacity-0');
+                content.classList.add('scale-100', 'opacity-100');
+            }, 10);
+            
+            lucide.createIcons();
+        }
+
+        function closeProject() {
+            const modal = document.getElementById('project-modal');
+            const content = document.getElementById('modal-content');
+            
+            content.classList.remove('scale-100', 'opacity-100');
+            content.classList.add('scale-95', 'opacity-0');
+            
+            setTimeout(() => modal.classList.add('hidden'), 500);
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeProject();
+        });
+    </script>
+    
+</body>
+</html>
